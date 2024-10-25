@@ -52,9 +52,9 @@ A nodejs web application to track assets which are being used by a company's emp
 ![Asset History](screenshots/pg14.png)
 
 ###  ENV Variables
-PORT=4000
-PRODUCTION=false
-SESSION_SECRET_KEY=zxvhkjwfeiusdfaFASDFKJBASDFMNB23478
+PORT=4000<br>
+PRODUCTION=false<br>
+SESSION_SECRET_KEY=zxvhkjwfeiusdfaFASDFKJBASDFMNB23478<br>
 DB_HOST=localhost<br>
 DB_NAME=asset_management_system<br>
 DB_USERNAME=postgres<br>
