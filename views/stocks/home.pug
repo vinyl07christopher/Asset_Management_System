@@ -1,0 +1,94 @@
+extends ../layout
+
+block variables 
+    //- -var title='title bar'
+    -var pageTitle = "Stock View"
+
+mixin card(name, count, value, icon)
+    .d-table.fw-light.custom-blue-bg-gradient(style="padding: .7rem 1rem;box-shadow: 0 3px 4px #0004")
+        .d-grid
+            .d-flex.align-items-center.gap-3.opacity-50
+                .icon(class=icon, style="font-size:2.5rem")
+                div(style="font-size:1.4rem;")=name
+
+            .text-end
+                span.fw-normal.me-1(style='font-size:1.5rem')=count
+                span.opacity-75="Items"
+            .text-end
+                span.opacity-75.me-2="Total Value"
+                - const valueShort = value / 10000000 >= 1 ? (value / 10000000).toFixed(2) +  " Cr" : value / 100000 >= 1 ? (value / 100000).toFixed(2) +  " L" : value / 1000 >= 1 ? (value / 1000).toFixed(2) +  " k" : value.toFixed(0)
+                span.fw-normal(style='font-size:1.8rem')="₹ " + valueShort
+                span(style='white-space:nowrap')=" / ₹ " + new Intl.NumberFormat('en-IN', {minimumFractionDigits: 2,maximumFractionDigits: 2}).format(value)
+
+block content 
+    link(rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css")
+
+    .bg-light.p-3.small
+        .d-lg-flex.gap-2.justify-content-between
+            .mb-4.order-lg-last
+                +card("Assets in stock", data.summary.allStocksSummary.count, data.summary.allStocksSummary.total, "fa fa-table-list")
+            .mb-4.order-lg-first
+                .opacity-75.mb-3.fw-bold.h6 Assets in stock - Branch wise
+                .table-responsive.pb-3(style='width:100%;max-width:500px')
+                    table#branchTable.table.table-hover.table-light.small.my-1.pt-1
+                        thead 
+                            tr
+                                th.custom-blue-bg.text-center(style="width: 1%; white-space: nowrap;") # 
+                                th.custom-blue-bg.text-center Branch
+                                th.custom-blue-bg.text-center Number of Assets
+                                th.custom-blue-bg.text-center Total Value (₹)
+                        tbody 
+                            - let index = 1
+                            each  _data, name in data.summary.branchWiseSummary
+                                tr(style='font-size:.7rem')
+                                    td=index++
+                                    td=name
+                                    td.text-end=_data.count
+                                    td.text-end=new Intl.NumberFormat('en-IN', {minimumFractionDigits: 2,maximumFractionDigits: 2}).format(_data.total)
+
+        .opacity-75.mb-3.fw-bold.h6 Assets in stock
+        .table-responsive.pb-3
+            table#stockTable.table.table-hover.table-light.small.my-1.pt-1
+                thead 
+                    tr
+                        th.custom-blue-bg(style="width: 1%; white-space: nowrap;") ID 
+                        th.custom-blue-bg Asset Name
+                        th.custom-blue-bg Serial Bumber
+                        th.custom-blue-bg UniqueId
+                        th.custom-blue-bg Make
+                        th.custom-blue-bg Model
+                        th.custom-blue-bg Category
+                        th.custom-blue-bg Purchase Date
+                        th.custom-blue-bg Value (₹)
+                        th.custom-blue-bg Branch
+                        th.custom-blue-bg(style="width: 1%; white-space: nowrap;") Actions
+
+                tbody 
+                    each asset, index in data.assetsInStock 
+                        tr(style='font-size:.7rem')
+                            td=index+1
+                            td=asset.name
+                            td=asset.serialNumber
+                            td=asset.uniqueId
+                            td=asset.make
+                            td=asset.model
+                            td=asset.category.name
+                            td=asset.purchaseDate.toLocaleDateString()
+                            td.text-end=new Intl.NumberFormat('en-IN', {minimumFractionDigits: 2,maximumFractionDigits: 2}).format(asset.value)
+                            td=asset.branch
+                            td(style="white-space: nowrap;").text-center
+                                a.text-decoration-none.text-danger.text-uppercase(href=`/assets/assign/issue/${asset.id}`)
+                                    b
+                                        i.fa.fa-share.me-1 
+                                        span Issue
+        
+    script(src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js")
+    script.
+      $(document).ready(function() {
+         $('#stockTable').DataTable({
+            columnDefs : [
+                {orderable: false, targets: -1}
+            ]
+         });
+         $('#branchTable').DataTable();
+      });

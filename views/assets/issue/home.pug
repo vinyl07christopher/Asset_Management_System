@@ -1,0 +1,99 @@
+extends ../../layout
+
+block variables 
+    //- -var title='title bar'
+    -var pageTitle = "Issue / Return Stocks"
+
+block content 
+    link(rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css")
+
+    .bg-light.p-3.small
+        .opacity-75.mb-3.fw-bold.h6(style="color:darkblue")
+            .fa.fa-share.me-2
+            span Issue Assets -  Ready To Use
+        .table-responsive.pb-3
+            table#issueTable.table.table-hover.table-light.small.my-1.pt-1
+                thead 
+                    tr
+                        th.custom-blue-bg(style="width: 1%; white-space: nowrap;") ID 
+                        th.custom-blue-bg Asset Name
+                        th.custom-blue-bg Serial Bumber
+                        th.custom-blue-bg UniqueId
+                        th.custom-blue-bg Make
+                        th.custom-blue-bg Model
+                        th.custom-blue-bg Category
+                        th.custom-blue-bg Value (₹)
+                        th.custom-blue-bg Branch
+                        th.custom-blue-bg(style="width: 1%; white-space: nowrap;") Actions
+
+                tbody 
+                    each asset, index in data.assetsInStock 
+                        tr(style='font-size:.7rem')
+                            td=index+1
+                            td=asset.name
+                            td=asset.serialNumber
+                            td=asset.uniqueId
+                            td=asset.make
+                            td=asset.model
+                            td=asset.category.name
+                            td.text-end=new Intl.NumberFormat('en-IN', {minimumFractionDigits: 2,maximumFractionDigits: 2}).format(asset.value)
+                            td=asset.branch
+                            td(style="white-space: nowrap;").text-center
+                                a.text-decoration-none.text-danger.text-uppercase(href=`/assets/assign/issue/${asset.id}`)
+                                    b
+                                        i.fa.fa-share.me-1 
+                                        span Issue
+        hr
+        .opacity-75.mb-3.fw-bold.h6(style="color:darkred")
+            .fa.fa-rotate-left.me-2
+            span Return Assets -  Currently In Use
+        .table-responsive.pb-3
+            table#returnTable.table.table-hover.table-light.small.my-1.pt-1
+                thead 
+                    tr
+                        th.bg-danger.text-light(style="width: 1%; white-space: nowrap;") ID 
+                        th.bg-danger.text-light Name
+                        th.bg-danger.text-light Serial Bumber
+                        th.bg-danger.text-light UniqueId
+                        th.bg-danger.text-light Make
+                        th.bg-danger.text-light Model
+                        th.bg-danger.text-light Category
+                        th.bg-danger.text-light Value (₹)
+                        th.bg-danger.text-light Branch
+                        th.bg-danger.text-light Employee
+                        th.bg-danger.text-light(style="width: 1%; white-space: nowrap;") Actions
+
+
+                tbody 
+                    each asset, index in data.assetsIssued 
+                        tr(style='font-size:.7rem')
+                            td=index+1
+                            td=asset.name
+                            td=asset.serialNumber
+                            td=asset.uniqueId
+                            td=asset.make
+                            td=asset.model
+                            td=asset.category.name
+                            td.text-end=new Intl.NumberFormat('en-IN', {minimumFractionDigits: 2,maximumFractionDigits: 2}).format(asset.value)
+                            td=asset.branch
+                            td=asset.employee && asset.employee.name
+                            td(style="white-space: nowrap;").text-center
+                                a.text-decoration-none.text-danger.text-uppercase(href=`/assets/assign/return/${asset.id}`)
+                                    b
+                                        i.fa.fa-share.me-1 
+                                        span Return
+      
+    script(src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js")
+    script.
+      $(document).ready(function() {
+         $('#issueTable').DataTable({
+            columnDefs:[
+                {orderable: false, targets: -1}
+            ]
+         });
+         $('#returnTable').DataTable({
+            columnDefs:[
+                {orderable: false, targets: -1}
+            ]
+         });
+      });

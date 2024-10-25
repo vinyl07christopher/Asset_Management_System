@@ -1,0 +1,70 @@
+extends ../../layout
+
+block variables 
+    //- -var title='title bar'
+    -var pageTitle = "Asset History"
+
+block content 
+    link(rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css")
+
+    .bg-light.p-3.small
+      .row.w-100.mx-auto
+        .mx-auto.d-table(style='width:100%;max-width:450px;font-size:.8rem').col-lg-6.order-last
+          table.table.table-striped.table-light.table-bordered
+            thead 
+              tr 
+                th(colspan=2).text-center.bg-dark.text-light Asset Details
+            tbody 
+              tr 
+                td Asset Name
+                td=data.asset.name
+              tr 
+                td Serial Number
+                td=data.asset.serialNumber
+              tr 
+                td Unique ID
+                td=data.asset.uniqueId
+              tr 
+                td Make
+                td=data.asset.make
+              tr 
+                td Model
+                td=data.asset.model
+              tr 
+                td Purchase Date
+                td=data.asset.purchaseDate.toLocaleString()
+              tr 
+                td Value
+                td=data.asset.value
+              tr 
+                td Branch
+                td=data.asset.branch
+              tr 
+                td Category
+                td=data.asset.category.name
+
+        .mx-auto.mb-auto.col-lg-6
+          if data
+              .table-responsive.pb-3
+                  table#assetHistoryTable.table.table-hover.table-light.small.my-1.pt-1
+                      thead 
+                          tr
+                              th.custom-blue-bg(style="width: 1%; white-space: nowrap;") ID 
+                              th.custom-blue-bg Action
+                              th.custom-blue-bg Date of Action
+                              th.custom-blue-bg Employee
+                              th.custom-blue-bg Reason
+                      tbody 
+                          each history, index in data.assetHistory 
+                              tr(style='font-size:.7rem')
+                                  td=index+1
+                                  td=history.action
+                                  td=history.actionDate.toLocaleString()
+                                  td=history.employee && history.employee.name
+                                  td=history.reason
+
+    script(src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js")
+    script.
+      $(document).ready(function() {
+       const table =  $('#assetHistoryTable').DataTable();
+      });

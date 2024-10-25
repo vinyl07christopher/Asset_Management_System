@@ -1,0 +1,40 @@
+mixin navLink(url, name, icon)
+    a.nav-link.d-flex.justify-content-between.gap-3.align-items-center(href=url)
+        span=name
+        i(class=icon)
+
+.d-md-none.d-table.ms-auto.p-2
+    i.fa.fa-bars.p-2.d-flex.gap-2.hamburger-menu-btn.js-hamburger-menu-btn MENU
+
+
+
+.my-5.text-center.heading.d-none.d-md-block.mx-3.text-center.fw-bold(style="text-shadow: 0 0 4px #000;")
+    div Asset 
+    div Management 
+    div System
+
+.menu.collapse
+    hr.d-md-none
+    +navLink('/', 'Home', 'me-2 fa fa-home')
+    +navLink('/employees', 'Employee Master', 'me-2 fa fa-users')
+    +navLink('/assets', 'Asset Master', 'me-2 fa fa-list')
+    +navLink('/asset-categories', 'Asset Category Master', 'me-2 fa fa-layer-group')
+    +navLink('/assets/stock', 'Stock View', 'me-2 fa fa-table-list')
+    +navLink('/assets/assign', 'Issue / Return Asset', 'me-2 fa fa-share')
+    +navLink('/assets/scrap', 'Scrap Asset', 'me-2 fa fa-recycle')
+    +navLink('/assets/history', 'Asset History', 'me-2 fa fa-clock-rotate-left')
+
+.menu.collapse.mt-auto.mb-2
+    form(action="/logout", method="post") 
+        button.logout-btn.mx-auto.d-table.text-uppercase(type="submit")
+            .d-flex.justify-content-center.align-items-center.gap-3.px-4.py-2.my-auto
+                .fa.fa-right-from-bracket
+                span Logout
+
+
+
+
+
+
+
+

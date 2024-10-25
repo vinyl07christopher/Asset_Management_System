@@ -1,0 +1,29 @@
+extends layout
+
+block variables 
+    //- -var title='title bar'
+    -var pageTitle = "Dashboard"
+
+
+mixin card(link, name, icon, value)
+    a.dashboard-card(href=link)
+        .icon(class=icon)
+        .value=value
+        .name=name
+
+block content 
+    .d-grid.gap-2.px-3
+        .m-0.opacity-50 Employees 
+        .d-grid.d-md-flex.gap-3.flex-wrap
+            +card('/employees', 'Employees', 'fa fa-users', `${data.employeeCount }`)
+        hr.border-secondary
+        .m-0.opacity-50 Assets 
+        .d-grid.d-md-flex.gap-3.flex-wrap
+            +card('/asset-categories', 'Asset Categories', 'fa fa-layer-group', `${data.assetCategoryCount }`)
+            +card('/assets', 'Total Assets', 'fa fa-list', `${data.assetTotalCount }`)
+            +card('/assets/stock', 'Assets in Stock', 'fa fa-table-list', `${data.assetInStockCount }`)
+            +card('/assets/assign', 'Issued Assets', 'fa fa-share', `${data.assetIssuedCount }`)
+            //- +card('/return-asset', 'Return Assets', 'fa fa-rotate-left', `${data.assetTotalCount }`)
+            +card('/assets/scrap', 'Scrapped Assets', 'fa fa-recycle', `${data.assetScrappedCount }`)
+            //- +card('/asset-history', 'Asset History', 'fa fa-clock-rotate-left', `${data.assetTotalCount }`)
+    

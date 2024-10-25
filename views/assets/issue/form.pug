@@ -1,0 +1,56 @@
+extends ../../layout
+
+block variables 
+  //- -var title='title bar'
+  -var pageTitle = `Assign Asset to Employee`
+
+block content 
+  .row.w-100.mx-auto
+    .mx-auto.d-table(style='width:100%;max-width:450px;font-size:.8rem').col-lg-6.order-last.order-lg-first.mt-3.mt-lg-0
+      table.table.table-striped.table-light.table-bordered
+        thead 
+          tr 
+            th(colspan=2).text-center.bg-dark.text-light Asset Details
+        tbody 
+          tr 
+            td Asset Name
+            td=data.name
+          tr
+            td Serial Number
+            td=data.serialNumber
+          tr 
+            td Unique ID
+            td=data.uniqueId
+          tr 
+            td Make
+            td=data.make
+          tr 
+            td Model
+            td=data.model
+          tr 
+            td Purchase Date
+            td=data.purchaseDate.toLocaleString()
+          tr 
+            td Value
+            td=data.value
+          tr 
+            td Branch
+            td=data.branch
+          tr 
+            td Category
+            td=data.category.name
+    
+    form.asset-form.small.mx-auto.mb-auto(action=`/assets/assign/issue/${data && data.id}` method="POST").col-lg-6
+      .mb-3.col-lg-6
+        label(for="employee" class="form-label") Assign Asset to Employee
+        select#employee( class=`form-select` name="employee" required )
+          option(value="" disabled selected) Select Employee
+          each employee in employees
+            option(value=employee.id)=employee.name
+
+      button(type="submit" class="btn btn-primary") Issue Asset
+
+
+
+
+

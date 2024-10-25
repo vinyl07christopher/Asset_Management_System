@@ -1,0 +1,49 @@
+extends ../layout
+
+block variables 
+    //- -var title='title bar'
+    -var pageTitle = "Asset Category Master"
+
+block content 
+    link(rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css")
+
+    .bg-light.p-3.small
+        .d-grid.d-md-flex.gap-4.mb-3.justify-content-between
+            .opacity-50 Asset Categories list
+            a(href="/asset-categories/new").btn.btn-dark.d-flex.justify-content-center.align-items-center.gap-2.rounded-pill.px-4
+                small
+                    i.fa.fa-plus.me-1
+                    span Add Category
+            
+        .table-responsive.pb-3
+            table#assetCategoryTable.table.table-hover.table-light.small.my-1.pt-1
+                thead 
+                    tr
+                        th.custom-blue-bg(style="width: 1%; white-space: nowrap;") ID 
+                        th.custom-blue-bg(style="width: auto;") Category Name 
+                        th.custom-blue-bg(style="width: 1%; white-space: nowrap;") Updated At
+                        th.custom-blue-bg(style="width: 1%; white-space: nowrap;") Created At
+                        th.custom-blue-bg(style="width: 1%; white-space: nowrap;") Actions
+                tbody 
+                    each assetCategory, index in data.assetCategories 
+                        tr 
+                            td=index + 1
+                            td=assetCategory.name
+                            td(style="white-space: nowrap;")=assetCategory.updatedAt.toLocaleString()
+                            td(style="white-space: nowrap;")=assetCategory.createdAt.toLocaleString()
+                            td(style="white-space: nowrap;")
+                                a.text-decoration-none.text-primary.text-uppercase(href=`/asset-categories/edit/${assetCategory.id}`)
+                                    b
+                                        i.fa.fa-pencil.me-1 
+                                        span Edit
+    
+
+    script(src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js")
+    script.
+      $(document).ready(function() {
+       const table =  $('#assetCategoryTable').DataTable({
+            'columnDefs': [
+                {'orderable': false, "targets" : -1}
+            ]
+        });
+      });

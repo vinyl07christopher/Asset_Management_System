@@ -1,0 +1,18 @@
+extends ../layout
+
+block variables 
+  //- -var title='title bar'
+  -var pageTitle = `Asset Category Master - ${(type === 'new' && 'Add') || (type === 'edit' && 'Update') || ""} Asset Category`
+
+block content 
+  if !(type === 'edit' && !data)
+    form.asset-category-form.small.mx-auto.mt-4(action=`/asset-categories/${type}${type === "edit" ? "/" + data.id : ''}` method="POST")
+      .mb-3
+        label(for="name" class="form-label") Category Name
+        input#name(type="text" name="name" class=`form-control ${(error) && 'is-invalid' }` value=(data && data.name) || "" required)
+        if error 
+          .small.text-danger=error
+
+      button(type="submit" class="btn btn-primary")=type === 'new' ? "Add Asset Category" : type === 'edit' ? "Update Asset Category" : "Submit"
+
+

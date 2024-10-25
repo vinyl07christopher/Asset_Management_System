@@ -1,0 +1,93 @@
+extends ../layout
+
+block variables 
+    //- -var title='title bar'
+    -var pageTitle = "Asset Master"
+
+mixin card(value, name)
+    .p-2.fw-light(style=`line-height:1;min-width:120px;color: #040d46;background-color: #040d4622;`).d-grid.gap-1.justify-content-center
+        div(style='font-size:.8rem')=name 
+        .fw-normal.text-center(style='font-size:1.2rem')=value
+
+block content 
+    link(rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css")
+
+    .bg-light.p-3.small
+        .d-grid.d-md-flex.gap-4.mb-3.justify-content-between
+            .opacity-50 Assets list
+
+            if data && data.count
+                .d-flex.gap-2.flex-wrap.justify-content-center
+                    +card(data.count.usable, "Total Usable Assets")
+                    +card(data.count.issued, "Assets in use")
+                    +card(data.count.inStock, "Assets ready to use")
+                    +card(data.count.scrapped, "Assets scrapped")
+
+            a(href="/assets/new").my-auto.btn.btn-dark.d-flex.justify-content-center.align-items-center.gap-2.rounded-pill.px-4
+                small
+                    i.fa.fa-plus.me-1
+                    span Add Asset
+            
+            
+        if data && data.assets
+            .table-responsive.pb-3
+                table#assetTable.table.table-hover.table-light.small.my-1.pt-1
+                    thead 
+                        tr
+                            th.custom-blue-bg(style="width: 1%; white-space: nowrap;") ID 
+                            th.custom-blue-bg Asset Name
+                            th.custom-blue-bg Serial Bumber
+                            th.custom-blue-bg UniqueId
+                            th.custom-blue-bg Make
+                            th.custom-blue-bg Model
+                            th.custom-blue-bg Category
+                            th.custom-blue-bg Status
+                            th.custom-blue-bg Purchase Date
+                            th.custom-blue-bg Value (₹)
+                            th.custom-blue-bg Branch
+                            th.custom-blue-bg Updated At
+                            th.custom-blue-bg Created At
+                            th.custom-blue-bg(style="width: 1%; white-space: nowrap;") Actions
+                    tbody 
+                        each asset, index in data.assets 
+                            tr(style='font-size:.7rem')
+                                td=index+1
+                                td(style="width: 1%; white-space: nowrap;")=asset.name
+                                td=asset.serialNumber
+                                td=asset.uniqueId
+                                td=asset.make
+                                td=asset.model
+                                td=asset.category.name
+                                td(class=`fw-bold text-uppercase ${asset.status === 'in stock' ? 'text-primary' : 'text-success' }`)=asset.status
+                                td=asset.purchaseDate.toLocaleDateString()
+                                td.text-end=new Intl.NumberFormat('en-IN', {minimumFractionDigits: 2,maximumFractionDigits: 2}).format(asset.value)
+                                td=asset.branch
+                                td=asset.updatedAt.toLocaleString()
+                                td=asset.createdAt.toLocaleString()
+                                td(style="white-space: nowrap;")
+                                    .d-flex.justify-contents-center.align-items-center.gap-2
+                                        if asset.status === 'in stock'
+                                            a.text-decoration-none.text-success.text-uppercase(href=`/assets/assign/issue/${asset.id}`)
+                                                b
+                                                    i.fa.fa-share.me-1 
+                                                    span Issue
+                                        else if asset.status === 'issued'
+                                            a.text-decoration-none.text-danger.text-uppercase(href=`/assets/return/${asset.id}`)
+                                                b
+                                                    i.fa.fa-rotate-left.me-1 
+                                                    span Return
+                                        a.text-decoration-none.text-primary.text-uppercase(href=`/assets/edit/${asset.id}`)
+                                            b
+                                                i.fa.fa-pencil.me-1 
+                                                span Edit
+        
+
+    script(src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js")
+    script.
+      $(document).ready(function() {
+       const table =  $('#assetTable').DataTable({
+            'columnDefs': [
+                {'orderable': false, "targets" : -1}
+            ]
+        });
+      });

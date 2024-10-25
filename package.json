@@ -1,0 +1,23 @@
+{
+  "name": "asset-management-system",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --watch --env-file=.env index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "express": "^4.21.1",
+    "express-session": "^1.18.1",
+    "joi": "^17.13.3",
+    "pg": "^8.13.0",
+    "pg-hstore": "^2.3.4",
+    "pug": "^3.0.3",
+    "sequelize": "^6.37.4"
+  }
+}

@@ -1,0 +1,39 @@
+extends ../layout
+
+block variables 
+  //- -var title='title bar'
+  -var pageTitle = `Employee Master - ${(type === 'new' && 'Add') || (type === 'edit' && 'Update') || ""} Employee`
+
+block content 
+  if !(type === 'edit' && !data)
+    form.employee-form.small.mx-auto.mt-4(action=`/employees/${type}${type === "edit" ? "/" + data.id : ''}` method="POST")
+      .mb-3
+        label(for="name" class="form-label") Employee Name
+        input#name(type="text" name="name" class=`form-control ${(errors && errors.name) && 'is-invalid' }` value=(data && data.name) || "" required)
+        if errors && errors.name
+          .small.text-danger=errors.name
+
+      .mb-3
+        label(for="email" class="form-label") Email
+        input#email(type="email" name="email" class=`form-control ${(errors && errors.email) && 'is-invalid' }` value=(data && data.email) || "" required)
+        if errors && errors.email
+          .small.text-danger=errors.email
+
+      .mb-3
+        label(for="phone" class="form-label") Phone
+        input#phone(type="tel" name="phone" class=`form-control ${(errors && errors.phone) && 'is-invalid' }` value=(data && data.phone) || "" required)
+        if errors && errors.phone
+          .small.text-danger=errors.phone
+
+      .mb-3
+        label(for="status" class="form-label") Status
+        select#status(name="status" class="form-select"  required)
+          option(disabled, value="") Select Status
+          option(value="active" selected=(data && data.status !== 'inactive')) Active
+          option(value="inactive" selected=(data && data.status === 'inactive')) Inactive
+        if errors && errors.status
+          .small.text-danger=errors.status
+
+      button(type="submit" class="btn btn-primary")=type === 'new' ? "Add Employee" : type === 'edit' ? "Update Employee" : "Submit"
+
+

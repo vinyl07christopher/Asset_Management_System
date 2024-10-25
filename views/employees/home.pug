@@ -1,0 +1,79 @@
+extends ../layout
+
+block variables 
+    //- -var title='title bar'
+    -var pageTitle = "Employee Master"
+
+block content 
+    link(rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css")
+
+    .bg-light.p-3.small
+        .d-grid.d-md-flex.gap-4.mb-3.justify-content-between
+            .opacity-50 Employees list
+            a(href="/employees/new").btn.btn-dark.d-flex.justify-content-center.align-items-center.gap-2.rounded-pill.px-4
+                small
+                    i.fa.fa-plus.me-1
+                    span Add Employee
+            
+        form#filterForm.mb-3.ms-auto.d-table
+            label(for="filterStatus").me-2
+                i.fa.fa-filter.me-2
+                span status
+            select#filterStatus
+                option(value="") All
+                option(value="active") Active
+                option(value="inactive") Inactive
+
+        .table-responsive.pb-3
+            table#employeeTable.table.table-hover.table-light.small.my-1.pt-1
+                thead 
+                    tr
+                        th.custom-blue-bg(style="width: 1%; white-space: nowrap;") ID 
+                        th.custom-blue-bg Employee Name 
+                        th.custom-blue-bg Email 
+                        th.custom-blue-bg Phone 
+                        th.custom-blue-bg Status
+                        th.custom-blue-bg Updated At
+                        th.custom-blue-bg Created At
+                        th.custom-blue-bg(style="width: 1%; white-space: nowrap;") Actions
+                tbody 
+                    each employee, index in data.employees 
+                        tr 
+                            td=index + 1
+                            td=employee.name
+                            td=employee.email
+                            td=employee.phone
+                            td=employee.status
+                            td=employee.updatedAt.toLocaleString()
+                            td=employee.createdAt.toLocaleString()
+                            td 
+                                a.text-decoration-none.text-primary.text-uppercase(href=`/employees/edit/${employee.id}`)
+                                    b
+                                        i.fa.fa-pencil.me-1 
+                                        span Edit
+    
+
+    script(src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js")
+    script.
+      $(document).ready(function() {
+       const table =  $('#employeeTable').DataTable({
+            'columnDefs': [
+                {'orderable': false, "targets" : -1}
+            ]
+        });
+
+        $('#filterStatus').on('change', function () {
+            const selectedStatus = $(this).val(); 
+            
+            $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+                const status = data[4]; 
+                if (selectedStatus === '' || status === selectedStatus) {
+                    return true; 
+                }
+                return false; 
+            });
+
+            table.draw(); 
+            $.fn.dataTable.ext.search.pop(); 
+        });
+      });

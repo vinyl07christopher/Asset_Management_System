@@ -1,0 +1,75 @@
+extends ../layout
+
+block variables 
+  //- -var title='title bar'
+  -var pageTitle = `Asset Master - ${(type === 'new' && 'Add') || (type === 'edit' && 'Update') || ""} Asset`
+
+block content 
+  if !(type === 'edit' && !data)
+    form.asset-form.small.mx-auto.mt-4(action=`/assets/${type}${type === "edit" ? "/" + data.id : ''}` method="POST" style='max-width: 600px')
+      .mb-3
+        label(for="name" class="form-label") Asset Name
+        input#name(type="text" name="name" class=`form-control ${(error) && 'is-invalid' }` value=(data && data.name) || "" required)
+        if errors && errors.name
+          .small.text-danger=errors.name
+
+      .row
+        .mb-3.col-lg-6
+          label(for="serialNumber" class="form-label") Serial Number
+          input#serialNumber(type="text" name="serialNumber" class=`form-control ${(errors && errors.serialNumber) ? 'is-invalid' : ''}` value=(data && data.serialNumber) || "" required)
+          if errors && errors.serialNumber
+            .small.text-danger=errors.serialNumber
+
+        .mb-3.col-lg-6
+          label(for="uniqueId" class="form-label") Unique ID
+          input#uniqueId(type="text" name="uniqueId" class=`form-control ${(errors && errors.uniqueId) ? 'is-invalid' : ''}` value=(data && data.uniqueId) || "" required)
+          if errors && errors.uniqueId
+            .small.text-danger=errors.uniqueId
+
+      .row
+        .mb-3.col-lg-6
+          label(for="make" class="form-label") Make
+          input#make(type="text" name="make" class=`form-control ${(errors && errors.make) ? 'is-invalid' : ''}` value=(data && data.make) || "" required)
+          if errors && errors.make
+            .small.text-danger=errors.make
+
+        .mb-3.col-lg-6
+          label(for="model" class="form-label") Model
+          input#model(type="text" name="model" class=`form-control ${(errors && errors.model) ? 'is-invalid' : ''}` value=(data && data.model) || "" required)
+          if errors && errors.model
+            .small.text-danger=errors.model
+
+      .row
+        .mb-3.col-lg-6
+          label(for="purchaseDate" class="form-label") Purchase Date
+          - const formattedPurchaseDate = data && data.purchaseDate ? new Date(data.purchaseDate).toISOString().substring(0, 10) : "";
+          input#purchaseDate(type="date" name="purchaseDate" class=`form-control ${(errors && errors.purchaseDate) ? 'is-invalid' : ''}` value=formattedPurchaseDate || "" required)
+          if errors && errors.purchaseDate
+            .small.text-danger=errors.purchaseDate
+
+        .mb-3.col-lg-6
+          label(for="value" class="form-label") Value
+          input#value(type="number" name="value" step="0.01" class=`form-control ${(errors && errors.value) ? 'is-invalid' : ''}` value=(data && data.value) || "" required)
+          if errors && errors.value
+            .small.text-danger=errors.value
+
+      .row
+        .mb-3.col-lg-6
+          label(for="branch" class="form-label") Branch
+          input#branch(type="text" name="branch" class=`form-control ${(errors && errors.branch) ? 'is-invalid' : ''}` value=(data && data.branch) || "" required)
+          if errors && errors.branch
+            .small.text-danger=errors.branch
+
+        .mb-3.col-lg-6
+          label(for="category" class="form-label") Category
+          select#category(name="assetCategoryId" class=`form-select ${(errors && errors.assetCategoryId) ? 'is-invalid' : ''}` required)
+            option(value="" disabled selected) Select a Category
+            each category in categories
+              option(value=category.id, selected=(data && data.assetCategoryId == category.id))= category.name
+          if errors && errors.assetCategoryId
+            .small.text-danger=errors.assetCategoryId
+
+
+      button(type="submit" class="btn btn-primary")=type === 'new' ? "Add Asset" : type === 'edit' ? "Update Asset" : "Submit"
+
+

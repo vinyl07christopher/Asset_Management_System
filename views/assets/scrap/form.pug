@@ -1,0 +1,52 @@
+extends ../../layout
+
+block variables 
+  //- -var title='title bar'
+  -var pageTitle = `Scrap This Asset`
+
+block content 
+    .row.w-100.mx-auto
+      .mx-auto.d-table(style='width:100%;max-width:450px;font-size:.8rem').col-lg-6.order-last.order-lg-first.mt-3.mt-lg-0
+        table.table.table-striped.table-light.table-bordered
+          thead 
+            tr 
+              th(colspan=2).text-center.bg-dark.text-light Asset Details
+          tbody 
+            tr 
+              td Asset Name
+              td=data.name
+            tr 
+              td Serial Number
+              td=data.serialNumber
+            tr 
+              td Unique ID
+              td=data.uniqueId
+            tr 
+              td Make
+              td=data.make
+            tr 
+              td Model
+              td=data.model
+            tr 
+              td Purchase Date
+              td=data.purchaseDate.toLocaleString()
+            tr 
+              td Value
+              td=data.value
+            tr 
+              td Branch
+              td=data.branch
+            tr 
+              td Category
+              td=data.category.name
+
+      form#scrapAssetForm.asset-form.small.mx-auto.mb-auto(action=`/assets/scrap/${data && data.id}` method="POST").col-lg-6
+        input(type="hidden" name="scrap" value="scrap" required)
+        .text-danger.mb-2.small Scrapping will make this asset permanently obsolete and invisible on other pages.
+
+        button(type="submit", class="btn btn-danger", style='background-color:#b00') Scrap This Asset
+
+    script.
+      document.getElementById("scrapAssetForm").addEventListener("submit", function(event) {
+        if (!confirm("Do you want to scrap this asset?")) event.preventDefault()
+      });
